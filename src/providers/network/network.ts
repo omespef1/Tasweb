@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs';
@@ -29,8 +29,18 @@ Get(controller: string, loading: boolean = true, content: string = "Cargando..."
     content:content,
     spinner:'ios'
   })
+  const headerDict = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Origin':'*'
+  }
 
-    return this.http.get(`${this.baseUrl}${controller}`).retryWhen(error => {
+  let bodyRequest: any = {
+    headers:  new HttpHeaders(headerDict),              
+  }
+
+    return this.http.get(`${this.baseUrl}${controller}`,bodyRequest).retryWhen(error => {
       return error
         .flatMap((error: any) => {
           if (error.status === 503) {
@@ -65,7 +75,19 @@ Post(params: any, urlService: string, content: string = "Cargando..."){
     content:content,
     spinner:'ios'
   })
-    return this.http.get(`${this.baseUrl}${urlService}`).retryWhen(error => {
+
+  const headerDict = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Origin':'*'
+  }
+
+  let bodyRequest: any = {
+    headers:  new HttpHeaders(headerDict),              
+  }
+
+    return this.http.get(`${this.baseUrl}${urlService}`,bodyRequest).retryWhen(error => {
       return error
         .flatMap((error: any) => {
           if (error.status === 503) {
